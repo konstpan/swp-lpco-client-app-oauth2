@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Map;
 
 import javax.swing.DefaultComboBoxModel;
@@ -30,7 +31,7 @@ public class ClientApp {
 	private JTextPane txtpnDDD;
 	private JComboBox lpcoTypeField;
 
-	private OAuth2Client restClient = new OAuth2Client();
+	private OAuth2Client restClient;
 	private JTextField authServerUrlField;
 	private JTextField portalServerUrlField;
 
@@ -50,10 +51,8 @@ public class ClientApp {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
-	public ClientApp() {
+	public ClientApp() throws GeneralSecurityException {
+		restClient = new OAuth2Client();
 		initialize();
 	}
 
