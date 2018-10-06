@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -28,6 +30,8 @@ public class ClientApp {
 	private JTextPane txtpnDDD;
 
 	private OAuth2Client restClient = new OAuth2Client();
+	private JTextField txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken;
+	private JTextField txtHttpdemomockableio;
 
 	/**
 	 * Launch the application.
@@ -133,6 +137,56 @@ public class ClientApp {
 		textField_1.setColumns(10);
 		textField_1.setBounds(122, 112, 220, 20);
 		panel.add(textField_1);
+		
+		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken = new JTextField();
+		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.setText("http://localhost:8080/auth/realms/master/protocol/openid-connect/token");
+		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.setColumns(10);
+		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.setBounds(10, 207, 300, 20);
+		restClient.setAuthResource(txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.getText());
+		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.getDocument().addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+				restClient.setAuthResource(txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.getText());
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent arg0) {
+				restClient.setAuthResource(txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.getText());
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent arg0) {
+				restClient.setAuthResource(txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.getText());
+			}
+		    // implement the methods
+		});
+		panel.add(txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken);
+		
+		txtHttpdemomockableio = new JTextField();
+		txtHttpdemomockableio.setText("http://demo1295438.mockable.io/");
+		txtHttpdemomockableio.setColumns(10);
+		txtHttpdemomockableio.setBounds(10, 238, 300, 20);
+		restClient.setPortalResource(txtHttpdemomockableio.getText());
+		txtHttpdemomockableio.getDocument().addDocumentListener(new DocumentListener() {
+
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+				restClient.setPortalResource(txtHttpdemomockableio.getText());
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent arg0) {
+				restClient.setPortalResource(txtHttpdemomockableio.getText());
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent arg0) {
+				restClient.setPortalResource(txtHttpdemomockableio.getText());				
+			}
+		    // implement the methods
+		});
+		panel.add(txtHttpdemomockableio);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(369, 36, 305, 266);
