@@ -28,11 +28,11 @@ public class ClientApp {
 	private JPasswordField passwordField;
 	private JTextField docIDField;
 	private JTextPane txtpnDDD;
-	JComboBox lpcoTypeField;
+	private JComboBox lpcoTypeField;
 
 	private OAuth2Client restClient = new OAuth2Client();
-	private JTextField txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken;
-	private JTextField txtHttpdemomockableio;
+	private JTextField authServerUrlField;
+	private JTextField portalServerUrlField;
 
 	/**
 	 * Launch the application.
@@ -141,18 +141,18 @@ public class ClientApp {
 		docIDField.setBounds(122, 112, 220, 20);
 		panel.add(docIDField);
 
-		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken = new JTextField();
-		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken
-				.setText(AUTH_SERVER_URL);
-		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.setColumns(10);
-		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.setBounds(10, 207, 300, 20);
-		panel.add(txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken);
+		authServerUrlField = new JTextField();
+		authServerUrlField.setText(AUTH_SERVER_URL);
+		authServerUrlField.setColumns(10);
+		authServerUrlField.setBounds(10, 207, 300, 20);
+		authServerUrlField.setCaretPosition(0);
+		panel.add(authServerUrlField);
 
-		txtHttpdemomockableio = new JTextField();
-		txtHttpdemomockableio.setText(PORTAL_SERVER_URL);
-		txtHttpdemomockableio.setColumns(10);
-		txtHttpdemomockableio.setBounds(10, 238, 300, 20);
-		panel.add(txtHttpdemomockableio);
+		portalServerUrlField = new JTextField();
+		portalServerUrlField.setText(PORTAL_SERVER_URL);
+		portalServerUrlField.setColumns(10);
+		portalServerUrlField.setBounds(10, 238, 300, 20);
+		panel.add(portalServerUrlField);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(369, 36, 305, 266);
@@ -165,8 +165,8 @@ public class ClientApp {
 	}
 
 	private void setFormValues() {
-		restClient.setAuthResource(txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.getText());
-		restClient.setPortalResource(txtHttpdemomockableio.getText());
+		restClient.setAuthResource(authServerUrlField.getText());
+		restClient.setPortalResource(portalServerUrlField.getText());
 		restClient.setUsername(usernameField.getText());
 		restClient.setPassword(passwordField.getText());
 		restClient.setBusinessID(docIDField.getText());

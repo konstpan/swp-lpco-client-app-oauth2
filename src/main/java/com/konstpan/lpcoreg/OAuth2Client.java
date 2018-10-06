@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class OAuth2Client {
-	
+
 	private final Logger logger = LoggerFactory.getLogger(OAuth2Client.class);
 
 	private ResteasyClient client;
@@ -31,16 +31,16 @@ public class OAuth2Client {
 	private String password;
 	private String businessID;
 	private String lpcoType;
-	
+
 	public OAuth2Client() {
 		client = new ResteasyClientBuilder().build();
 	}
-	
+
 	public void setAuthResource(String url) {
 		logger.info("Setting auth server url {}", url);
 		authResource = client.target(url);
 	}
-	
+
 	public void setPortalResource(String url) {
 		logger.info("Setting portal server url {}", url);
 		portalResource = client.target(url);
@@ -48,28 +48,32 @@ public class OAuth2Client {
 
 	public Map<String, String> retrieveState() throws JsonParseException, JsonMappingException, IOException {
 		String accessToken = getAccessToken(username, password);
-		
+
 		Response response = portalResource.request().header("Authorization", "Bearer " + accessToken).get();
 		String jsonResp = response.readEntity(String.class);
 		response.close();
-		
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, String> objResp = new HashMap<String, String>();
-		objResp = objectMapper.readValue(jsonResp, new TypeReference<Map<String, String>>(){});
-		
+		objResp = objectMapper.readValue(jsonResp, new TypeReference<Map<String, String>>() {
+		});
+
 		return objResp;
 	}
-	
-	private String getAccessToken(String username, String password) throws JsonParseException, JsonMappingException, IOException {
-		Form form = new Form().param("grant_type", "password").param("username", username).param("password", password).param("client_id", "admin-cli");
+
+	private String getAccessToken(String username, String password)
+			throws JsonParseException, JsonMappingException, IOException {
+		Form form = new Form().param("grant_type", "password").param("username", username).param("password", password)
+				.param("client_id", "admin-cli");
 		Response response = authResource.request().post(Entity.form(form));
 		String jsonResp = response.readEntity(String.class);
 		response.close();
-		
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, String> objResp = new HashMap<String, String>();
-		objResp = objectMapper.readValue(jsonResp, new TypeReference<Map<String, String>>(){});
-		
+		objResp = objectMapper.readValue(jsonResp, new TypeReference<Map<String, String>>() {
+		});
+
 		return objResp.get("access_token");
 	}
 
