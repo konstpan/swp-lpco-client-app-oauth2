@@ -21,8 +21,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class ClientApp {
 
-	private static final String PORTAL_SERVER_URL = "http://demo1295438.mockable.io/";
-	private static final String AUTH_SERVER_URL = "http://localhost:8080/auth/realms/master/protocol/openid-connect/token";
+	private static final String PORTAL_SERVER_URL = "https://proddev16:8443/swp.trader.core-web/rs/DocumentRetrievalService";
+	private static final String AUTH_SERVER_URL = "https://proddev21.athens.intrasoft-intl.private:8443/auth/realms/swp/protocol/openid-connect/token";
 	private JFrame frmProteusLpco;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
@@ -100,18 +100,17 @@ public class ClientApp {
 					Map<String, String> state = restClient.retrieveState();
 
 					StringBuilder text = new StringBuilder();
-					text.append("Code: " + state.get("status") + "\n");
-					text.append("Description: " + state.get("statusDescr") + "\n");
+					text.append("LPCO: " + state.get("LPCO") + "\n");
+					text.append("ID: " + state.get("businessID") + "\n");
+					text.append("Code: " + state.get("statusCode") + "\n");
+					text.append("Description: " + state.get("statusDescription") + "\n");
 
 					txtpnDDD.setText(text.toString());
 				} catch (JsonParseException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (JsonMappingException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -122,7 +121,7 @@ public class ClientApp {
 		lblDocumentId.setBounds(36, 87, 77, 14);
 		panel.add(lblDocumentId);
 
-		JLabel lblDocumentType = new JLabel("Document ID");
+		JLabel lblDocumentType = new JLabel("Business ID");
 		lblDocumentType.setBounds(36, 115, 77, 14);
 		panel.add(lblDocumentType);
 
@@ -152,6 +151,7 @@ public class ClientApp {
 		portalServerUrlField.setText(PORTAL_SERVER_URL);
 		portalServerUrlField.setColumns(10);
 		portalServerUrlField.setBounds(10, 238, 300, 20);
+		portalServerUrlField.setCaretPosition(0);
 		panel.add(portalServerUrlField);
 
 		JPanel panel_1 = new JPanel();
