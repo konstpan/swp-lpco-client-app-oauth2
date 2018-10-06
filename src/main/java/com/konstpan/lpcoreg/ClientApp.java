@@ -15,19 +15,20 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class ClientApp {
 
+	private static final String PORTAL_SERVER_URL = "http://demo1295438.mockable.io/";
+	private static final String AUTH_SERVER_URL = "http://localhost:8080/auth/realms/master/protocol/openid-connect/token";
 	private JFrame frmProteusLpco;
-	private JTextField textField;
+	private JTextField usernameField;
 	private JPasswordField passwordField;
-	private JTextField textField_1;
+	private JTextField docIDField;
 	private JTextPane txtpnDDD;
+	JComboBox lpcoTypeField;
 
 	private OAuth2Client restClient = new OAuth2Client();
 	private JTextField txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken;
@@ -75,10 +76,10 @@ public class ClientApp {
 		lblClientId.setBounds(36, 30, 77, 14);
 		panel.add(lblClientId);
 
-		textField = new JTextField();
-		textField.setBounds(122, 27, 110, 20);
-		panel.add(textField);
-		textField.setColumns(10);
+		usernameField = new JTextField();
+		usernameField.setBounds(122, 27, 110, 20);
+		panel.add(usernameField);
+		usernameField.setColumns(10);
 
 		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setBounds(36, 58, 77, 14);
@@ -88,13 +89,15 @@ public class ClientApp {
 		passwordField.setBounds(122, 55, 110, 20);
 		panel.add(passwordField);
 
-		JButton btnGetStatus = new JButton("Status");
-		btnGetStatus.setBounds(36, 148, 89, 23);
+		JButton btnGetStatus = new JButton("Get Status");
+		btnGetStatus.setBounds(25, 148, 100, 23);
 		btnGetStatus.addActionListener(new ActionListener() {
-			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Map<String, String> state = restClient.retrieveState(textField.getText(), passwordField.getText());
+					txtpnDDD.setText("");
+					setFormValues();
+
+					Map<String, String> state = restClient.retrieveState();
 
 					StringBuilder text = new StringBuilder();
 					text.append("Code: " + state.get("status") + "\n");
@@ -123,69 +126,32 @@ public class ClientApp {
 		lblDocumentType.setBounds(36, 115, 77, 14);
 		panel.add(lblDocumentType);
 
-		JButton btnDocument = new JButton("Document");
-		btnDocument.setBounds(132, 148, 100, 23);
+		JButton btnDocument = new JButton("Get Document");
+		btnDocument.setBounds(132, 148, 130, 23);
 		panel.add(btnDocument);
 
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(
+		lpcoTypeField = new JComboBox();
+		lpcoTypeField.setModel(new DefaultComboBoxModel(
 				new String[] { "Veterinary", "Phytosanitary", "Temporary Storage", "Simplified Procedure" }));
-		comboBox.setBounds(122, 84, 110, 20);
-		panel.add(comboBox);
+		lpcoTypeField.setBounds(122, 84, 110, 20);
+		panel.add(lpcoTypeField);
 
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(122, 112, 220, 20);
-		panel.add(textField_1);
-		
+		docIDField = new JTextField();
+		docIDField.setColumns(10);
+		docIDField.setBounds(122, 112, 220, 20);
+		panel.add(docIDField);
+
 		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken = new JTextField();
-		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.setText("http://localhost:8080/auth/realms/master/protocol/openid-connect/token");
+		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken
+				.setText(AUTH_SERVER_URL);
 		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.setColumns(10);
 		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.setBounds(10, 207, 300, 20);
-		restClient.setAuthResource(txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.getText());
-		txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.getDocument().addDocumentListener(new DocumentListener() {
-
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {
-				restClient.setAuthResource(txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.getText());
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent arg0) {
-				restClient.setAuthResource(txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.getText());
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent arg0) {
-				restClient.setAuthResource(txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.getText());
-			}
-		    // implement the methods
-		});
 		panel.add(txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken);
-		
+
 		txtHttpdemomockableio = new JTextField();
-		txtHttpdemomockableio.setText("http://demo1295438.mockable.io/");
+		txtHttpdemomockableio.setText(PORTAL_SERVER_URL);
 		txtHttpdemomockableio.setColumns(10);
 		txtHttpdemomockableio.setBounds(10, 238, 300, 20);
-		restClient.setPortalResource(txtHttpdemomockableio.getText());
-		txtHttpdemomockableio.getDocument().addDocumentListener(new DocumentListener() {
-
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {
-				restClient.setPortalResource(txtHttpdemomockableio.getText());
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent arg0) {
-				restClient.setPortalResource(txtHttpdemomockableio.getText());
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent arg0) {
-				restClient.setPortalResource(txtHttpdemomockableio.getText());				
-			}
-		    // implement the methods
-		});
 		panel.add(txtHttpdemomockableio);
 
 		JPanel panel_1 = new JPanel();
@@ -196,5 +162,14 @@ public class ClientApp {
 		txtpnDDD = new JTextPane();
 		txtpnDDD.setBounds(0, 0, 305, 266);
 		panel_1.add(txtpnDDD);
+	}
+
+	private void setFormValues() {
+		restClient.setAuthResource(txtHttplocalhostauthrealmsmasterprotocolopenidconnecttoken.getText());
+		restClient.setPortalResource(txtHttpdemomockableio.getText());
+		restClient.setUsername(usernameField.getText());
+		restClient.setPassword(passwordField.getText());
+		restClient.setBusinessID(docIDField.getText());
+		restClient.setLpcoType(lpcoTypeField.getSelectedItem().toString());
 	}
 }

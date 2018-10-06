@@ -27,6 +27,11 @@ public class OAuth2Client {
 	private ResteasyWebTarget authResource;
 	private ResteasyWebTarget portalResource;
 
+	private String username;
+	private String password;
+	private String businessID;
+	private String lpcoType;
+	
 	public OAuth2Client() {
 		client = new ResteasyClientBuilder().build();
 	}
@@ -41,7 +46,7 @@ public class OAuth2Client {
 		portalResource = client.target(url);
 	}
 
-	public Map<String, String> retrieveState(String username, String password) throws JsonParseException, JsonMappingException, IOException {
+	public Map<String, String> retrieveState() throws JsonParseException, JsonMappingException, IOException {
 		String accessToken = getAccessToken(username, password);
 		
 		Response response = portalResource.request().header("Authorization", "Bearer " + accessToken).get();
@@ -66,6 +71,22 @@ public class OAuth2Client {
 		objResp = objectMapper.readValue(jsonResp, new TypeReference<Map<String, String>>(){});
 		
 		return objResp.get("access_token");
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setBusinessID(String businessID) {
+		this.businessID = businessID;
+	}
+
+	public void setLpcoType(String lpcoType) {
+		this.lpcoType = lpcoType;
 	}
 
 }
