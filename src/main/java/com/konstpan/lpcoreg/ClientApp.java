@@ -17,8 +17,12 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
+import org.icepdf.ri.common.SwingController;
+import org.icepdf.ri.common.SwingViewBuilder;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.konstpan.lpcoreg.dto.SWDocumentDTO;
 
 public class ClientApp {
 
@@ -126,6 +130,28 @@ public class ClientApp {
 
 		JButton btnDocument = new JButton("Get Document");
 		btnDocument.setBounds(132, 148, 130, 23);
+		btnDocument.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SwingController controller = new SwingController();
+				SwingViewBuilder factory = new SwingViewBuilder(controller);
+				JPanel viewerComponentPanel = factory.buildViewerPanel();
+				JFrame window = new JFrame("LPCO Document Viewer");
+				window.getContentPane().add(viewerComponentPanel);
+				window.pack();
+				window.setVisible(true);
+				SWDocumentDTO swDoc = null;
+				try {
+					setFormValues();
+					
+					swDoc = restClient.retrieveDocument();
+					controller.openDocument(swDoc.getDocumentBody(), 0, swDoc.getDocumentBody().length, "Document",
+							null);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		panel.add(btnDocument);
 
 		lpcoTypeField = new JComboBox();

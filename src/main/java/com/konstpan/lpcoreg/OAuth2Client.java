@@ -30,6 +30,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.konstpan.lpcoreg.dto.SWDocumentDTO;
 import com.konstpan.lpcoreg.dto.WebServiceServiceResult;
 
 public class OAuth2Client {
@@ -74,6 +75,24 @@ public class OAuth2Client {
 		ObjectMapper objectMapper = new ObjectMapper();
 		WebServiceServiceResult<Map<String, String>> objResp;
 		objResp = objectMapper.readValue(jsonResp, new TypeReference<WebServiceServiceResult<Map<String, String>>>() {
+		});
+
+		return objResp.getItem();
+	}
+	
+	public SWDocumentDTO retrieveDocument() throws JsonParseException, JsonMappingException, IOException {
+		String accessToken = getAccessToken(username, password, clientSecret);
+
+		Response response = portalResource.path("/lpco/{lpcoType}/{businessID}")
+				.resolveTemplate("lpcoType", lpcoType).resolveTemplate("businessID", businessID)
+				.request(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + accessToken).get();
+		String jsonResp = response.readEntity(String.class);
+		logger.info("Response from service for {} {} {}", lpcoType, businessID, jsonResp);
+		response.close();
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		WebServiceServiceResult<SWDocumentDTO> objResp;
+		objResp = objectMapper.readValue(jsonResp, new TypeReference<WebServiceServiceResult<SWDocumentDTO>>() {
 		});
 
 		return objResp.getItem();
